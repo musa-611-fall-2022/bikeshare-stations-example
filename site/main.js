@@ -30,7 +30,9 @@ let bikeshareLayer = L.geoJSON(null, {
   pointToLayer: (geoJsonPoint, latlng) => L.circleMarker(latlng),
   style: feature => ({
     stroke: 1,
-    opacity: (map.getZoom() > 11) ? 1 : 0.5,
+    opacity: (map.getZoom() >= 12) ? 1 :
+             (map.getZoom() <= 9.3)  ? 0.1 :
+                                     map.getZoom() / 3 - 3,
     color: '#000000',
     weight: 1,
 
