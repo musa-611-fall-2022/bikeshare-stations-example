@@ -81,7 +81,7 @@ header. <a href="https://www.rideindego.com/about/data/">https://www.rideindego.
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">let</span> map = L.<span class="hljs-title function_">map</span>(<span class="hljs-string">&#x27;map&#x27;</span>).<span class="hljs-title function_">setView</span>([<span class="hljs-number">39</span>, -<span class="hljs-number">75</span>], <span class="hljs-number">13</span>);
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">let</span> map = L.<span class="hljs-title function_">map</span>(<span class="hljs-string">&#x27;map&#x27;</span>, { <span class="hljs-attr">zoomSnap</span>: <span class="hljs-number">0</span> }).<span class="hljs-title function_">setView</span>([<span class="hljs-number">39</span>, -<span class="hljs-number">75</span>], <span class="hljs-number">13</span>);
 L.<span class="hljs-title function_">tileLayer</span>(<span class="hljs-string">&#x27;https://tile.openstreetmap.org/{z}/{x}/{y}.png&#x27;</span>, {
     <span class="hljs-attr">attribution</span>: <span class="hljs-string">&#x27;&amp;copy; &lt;a href=&quot;https://www.openstreetmap.org/copyright&quot;&gt;OpenStreetMap&lt;/a&gt; contributors&#x27;</span>,
 }).<span class="hljs-title function_">addTo</span>(map);</pre></div></div>
@@ -115,18 +115,22 @@ accordingly. Initialize it with a guess of 30 bikes.</p>
               <p>Create a new layer of circle markers based on the downloaded data. It will
 get populated once we have downloaded data. Initialize with null (i.e., no
 data). Provide a style function that will style the markers according to the
-number of bikes available and the current zoom level.</p>
+number of bikes available and the current zoom level. The options for styling
+are available in the Leaflet docs:
+<a href="https://leafletjs.com/reference.html#path-option">https://leafletjs.com/reference.html#path-option</a></p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">let</span> bikeshareLayer = L.<span class="hljs-title function_">geoJSON</span>(<span class="hljs-literal">null</span>, {
   <span class="hljs-attr">pointToLayer</span>: <span class="hljs-function">(<span class="hljs-params">geoJsonPoint, latlng</span>) =&gt;</span> L.<span class="hljs-title function_">circleMarker</span>(latlng),
   <span class="hljs-attr">style</span>: <span class="hljs-function"><span class="hljs-params">feature</span> =&gt;</span> ({
-    <span class="hljs-attr">stroke</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">opacity</span>: (map.<span class="hljs-title function_">getZoom</span>() &gt; <span class="hljs-number">11</span>) ? <span class="hljs-number">1</span> : <span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">stroke</span>: <span class="hljs-literal">true</span>,
     <span class="hljs-attr">color</span>: <span class="hljs-string">&#x27;#000000&#x27;</span>,
-    <span class="hljs-attr">weight</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">weight</span>: (map.<span class="hljs-title function_">getZoom</span>() &gt;= <span class="hljs-number">12</span>)  ? <span class="hljs-number">1</span> :
+            (map.<span class="hljs-title function_">getZoom</span>() &lt;= <span class="hljs-number">9.3</span>) ? <span class="hljs-number">0.1</span> :
+                                     map.<span class="hljs-title function_">getZoom</span>() / <span class="hljs-number">3</span> - <span class="hljs-number">3</span>,
 
+    <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
     <span class="hljs-attr">fillColor</span>: <span class="hljs-string">&#x27;#0080e0&#x27;</span>,
     <span class="hljs-attr">fillOpacity</span>: feature.<span class="hljs-property">properties</span>.<span class="hljs-property">bikesAvailable</span> / maxBikesAvailable,
 
