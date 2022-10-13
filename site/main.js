@@ -25,17 +25,19 @@ let maxBikesAvailable = 30;
 // Create a new layer of circle markers based on the downloaded data. It will
 // get populated once we have downloaded data. Initialize with null (i.e., no
 // data). Provide a style function that will style the markers according to the
-// number of bikes available and the current zoom level.
+// number of bikes available and the current zoom level. The options for styling
+// are available in the Leaflet docs:
+// https://leafletjs.com/reference.html#path-option
 let bikeshareLayer = L.geoJSON(null, {
   pointToLayer: (geoJsonPoint, latlng) => L.circleMarker(latlng),
   style: feature => ({
-    stroke: 1,
-    opacity: (map.getZoom() >= 12) ? 1 :
-             (map.getZoom() <= 9.3)  ? 0.1 :
-                                     map.getZoom() / 3 - 3,
+    stroke: true,
     color: '#000000',
-    weight: 1,
+    weight: (map.getZoom() >= 12)  ? 1 :
+            (map.getZoom() <= 9.3) ? 0.1 :
+                                     map.getZoom() / 3 - 3,
 
+    fill: true,
     fillColor: '#0080e0',
     fillOpacity: feature.properties.bikesAvailable / maxBikesAvailable,
 
