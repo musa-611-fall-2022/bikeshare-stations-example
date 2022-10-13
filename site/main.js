@@ -12,7 +12,7 @@ const bikeshareURL = 'https://kiosks.bicycletransit.workers.dev/phl';
 // --------------------
 
 // Create the map and add a base tile layer.
-let map = L.map('map').setView([39, -75], 13);
+let map = L.map('map', { zoomSnap: 0 }).setView([39, -75], 13);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
